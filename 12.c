@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-int validPassword(char *username)
+int validUsername(char *username)
 {
     char a = 'a';
     char z = 'z';
@@ -12,9 +12,13 @@ int validPassword(char *username)
     char zero = '0';
     char nine = '9';
 
-    char underline = '_';
+    char espacialChars[] = {'!', '@', '#', '$', '%', '&', '(', ')'};
 
     int length = strlen(username);
+
+    int hasUppercase = 0;
+    int hasNumber = 0;
+    int hasEspecialChar = 0;
 
     if (username[0] >= zero && username[0] <= nine)
     {
@@ -23,28 +27,42 @@ int validPassword(char *username)
 
     for (int i = 0; i < length - 1; i++)
     {
-        if (username[i] != underline)
+
+        if (username[i] <= Z && username[i] >= A)
         {
-            if (username[i] > Z && username[i] < a)
+            hasUppercase = 1;
+        }
+        else if (username[i] > zero && username[i] <= nine)
+        {
+            hasNumber = 1;
+        }
+        else
+        {
+
+            for (int j = 0; j < 8; j++)
             {
-                return 0;
-            }
-            else if (username[i] < zero)
-            {
-                return 0;
-            }
-            else if (username[i] > nine && username[i] < A)
-            {
-                return 0;
-            }
-            else if (username[i] > z)
-            {
-                return 0;
+                if (username[i] == espacialChars[j])
+                {
+                    hasEspecialChar = 1;
+                }
             }
         }
     }
 
-    return 1;
+    if (hasUppercase == 0)
+    {
+        return -1;
+    }
+    else if (hasNumber == 0)
+    {
+        return -2;
+    }
+    else if (hasEspecialChar == 0)
+    {
+        return -3;
+    }
+
+    return 0;
 }
 
 int main(int argc, char const *argv[])
@@ -57,14 +75,7 @@ int main(int argc, char const *argv[])
 
     int r = validUsername(word);
 
-    if (r == 1)
-    {
-        printf("O usuário eh válido\n");
-    }
-    else
-    {
-        printf("O usuario eh invalido\n");
-    }
+    printf("validação: %d\n", r);
 
     return 0;
 }
