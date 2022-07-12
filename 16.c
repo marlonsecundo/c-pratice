@@ -1,28 +1,41 @@
 #include <stdio.h>
 
-float centroid(int k, int n, int array[n])
+int centroid(int n, int *array)
 {
-    float sum1 = 0;
-    float sum2 = 0;
+    int minK = 0;
+    int minResult = 2147483647;
 
-    for (int i = 0; i < k; i++)
+    for (int k = 0; k < n; k++)
     {
-        sum1 += array[i];
+        int sum1 = 0;
+        int sum2 = 0;
+
+        for (int i = 0; i < k; i++)
+        {
+            sum1 += array[i];
+        }
+
+        for (int j = k; j < n; j++)
+        {
+            int o = array[j];
+            sum2 += array[j];
+        }
+
+        int result = sum1 - sum2;
+
+        if (result < 0)
+        {
+            result = -1 * result;
+        }
+
+        if (result < minResult)
+        {
+            minResult = result;
+            minK = k;
+        }
     }
 
-    for (int j = k + 1; j <= n - 1; j++)
-    {
-        sum2 += array[j];
-    }
-
-    float result = sum1 - sum2;
-
-    if (result < 0)
-    {
-        result = -1 * result;
-    }
-
-    return result;
+    return minK;
 }
 
 int main(int argc, char const *argv[])
@@ -34,19 +47,14 @@ int main(int argc, char const *argv[])
 
     int array[n];
 
-    int k = 0;
-
-    printf("Digite o valor de k: ");
-    scanf("%d", &k);
-
-    printf("Preencha o vetor:\n");
+    printf("Preencha o vetor:");
 
     for (int j = 0; j < n; j++)
     {
-        scanf("%f", &array[n]);
+        scanf("%d", &array[n]);
     }
 
-    float result = centroid(k, n, array);
+    int result = centroid(n, array);
 
-    printf("O baricentro eh: %f", result);
+    printf("O baricentro (k) eh: %d", result);
 }
